@@ -1,0 +1,18 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --main-color: #69BDAD;
+}
+
+body{
+    background-color: var(--main-color);
+    min-height: 100vh;
+    font-family: "Arial Rounded MT Bold", sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
