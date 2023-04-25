@@ -1,5 +1,5 @@
 const Gameboard = (() => {
-    let gameArr = [];
+    let gameArr = [["x", "o", "x"], ["o", "x", "o"], ["x", "o", "x"]];
     let gameDiv = document.querySelector(".game");
 
     const init = () => {
@@ -11,17 +11,23 @@ const Gameboard = (() => {
             let cell = document.createElement("div");
             cell.className = "cell";
             cell.dataset.id = (i).toString();
-            if(i % 2 === 0) {
-                cell.textContent = "x";
-            }else{
-                cell.textContent = "o";
-            }
+            // if(i % 2 === 0) {
+            //     cell.textContent = "x";
+            // }else{
+            //     cell.textContent = "o";
+            // }
             gameDiv.appendChild(cell);
         }
     }
+
+    function _render(){
+
+    }
     return {
         init,
+        gameArr
     }
 })();
 
 Gameboard.init();
+console.log(Gameboard.gameArr);
