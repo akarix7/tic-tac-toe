@@ -4,6 +4,7 @@ const Gameboard = (() => {
 
     const init = () => {
         _createBoard();
+        _render();
     }
 
     function _createBoard(){
@@ -11,17 +12,18 @@ const Gameboard = (() => {
             let cell = document.createElement("div");
             cell.className = "cell";
             cell.dataset.id = (i).toString();
-            // if(i % 2 === 0) {
-            //     cell.textContent = "x";
-            // }else{
-            //     cell.textContent = "o";
-            // }
             gameDiv.appendChild(cell);
         }
     }
 
     function _render(){
-
+        let index = 0;
+        for(let i = 0; i < 3; i++){
+            for(let j = 0; j < 3; j++){
+                // console.log(gameDiv.children.item(index).dataset.id);
+                gameDiv.children.item(index++).textContent = gameArr[i][j];
+            }
+        }
     }
     return {
         init,
@@ -30,4 +32,3 @@ const Gameboard = (() => {
 })();
 
 Gameboard.init();
-console.log(Gameboard.gameArr);
