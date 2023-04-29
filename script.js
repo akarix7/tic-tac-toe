@@ -1,8 +1,12 @@
-const Player = (name, piece) => {
+const Player = (name, piece, turn) => {
     const getName = () => name;
     const getPiece = () => piece;
+    const getTurn = () => turn;
+    const setTurn = () => {
+        turn = !turn;
+    }
 
-    return {getName, getPiece};
+    return {getName, getPiece, getTurn, setTurn};
 }
 
 const Gameboard = (() => {
@@ -36,11 +40,11 @@ const Gameboard = (() => {
                 gameDiv.children.item(index++).addEventListener("click", (e) =>{
                     gameArr[i][j] = "x";
                     //let active = gameDiv.closest("div").querySelector(".cell");
-                    e.target.classList.add("inactive");
+                    e.target.classList.add("marked");
                     e.target.removeEventListener("click", () => {
 
                     })
-                    //console.log(e.target.)
+                    console.log(gameArr)
                 })
                 //gameDiv.children.item(index++).textContent = gameArr[i][j];
             }
@@ -56,13 +60,32 @@ const Gameboard = (() => {
 
 const Game = (() => {
     Gameboard.init();
-    const playerOne = Player("Shawn", "x");
-    const playerTwo = Player("Charlie", "o");
+    const playerOne = Player("Player One", "x", true);
+    const playerTwo = Player("Player Two", "o", false);
 
+    let activePlayer = playerOne.getTurn() ? playerOne.getName() : playerTwo.getName();
+    const switchTurns = () => {
+        activePlayer = playerOne.getTurn() ? playerTwo.getName() : playerOne.getName();
+        playerOne.setTurn();
+        playerTwo.setTurn();
+    }
+    const getActivePlayer = () => activePlayer;
+
+    const playRound = () => {
+        switchTurns();
+    }
     const setPiece = piece => {
 
     }
     return {
-
+        getActivePlayer,
+        playRound
     }
 })();
+
+console.log(Game.getActivePlayer());
+Game.playRound();
+console.log(Game.getActivePlayer());
+Game.playRound();
+console.log(Game.getActivePlayer());
+

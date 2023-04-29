@@ -42,6 +42,6 @@ body{
     align-items: center;
 }
 
-.inactive{
+.marked{
     background-color: var(--ticked);
 }
