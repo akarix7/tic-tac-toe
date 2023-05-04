@@ -31,6 +31,7 @@ const Gameboard = (() => {
         }
     }
 
+    //last active cell that set off an event should change turns
     const _render = () => {
         let index = 0;
         for(let i = 0; i < 3; i++){
@@ -38,12 +39,16 @@ const Gameboard = (() => {
             for(let j = 0; j < 3; j++){
                 // console.log(gameDiv.children.item(index).dataset.id);
                 gameDiv.children.item(index++).addEventListener("click", (e) =>{
-                    gameArr[i][j] = "x";
+                    //gameArr[i][j] = "x";
+                    gameArr[i][j] = GameController.getActivePlayer().getPiece();
+                    //console.log(gameArr[i][j]);
+                    e.target.textContent = gameArr[i][j];
                     //let active = gameDiv.closest("div").querySelector(".cell");
                     e.target.classList.add("marked");
                     e.target.removeEventListener("click", () => {
 
                     })
+                    GameController.playRound();
                     console.log(gameArr)
                 })
                 //gameDiv.children.item(index++).textContent = gameArr[i][j];
@@ -58,19 +63,22 @@ const Gameboard = (() => {
     }
 })();
 
-const Game = (() => {
+const GameController = (() => {
     Gameboard.init();
     const playerOne = Player("Player One", "x", true);
     const playerTwo = Player("Player Two", "o", false);
 
-    let activePlayer = playerOne.getTurn() ? playerOne.getName() : playerTwo.getName();
+    //let activePlayer = playerOne.getTurn() ? playerOne.getName() : playerTwo.getName();
+    let activePlayer = playerOne;
     const switchTurns = () => {
-        activePlayer = playerOne.getTurn() ? playerTwo.getName() : playerOne.getName();
+        //activePlayer = playerOne.getTurn() ? playerTwo.getName() : playerOne.getName();
+        activePlayer = playerOne.getTurn() ? playerTwo : playerOne;
         playerOne.setTurn();
         playerTwo.setTurn();
     }
     const getActivePlayer = () => activePlayer;
 
+    //logic to play game
     const playRound = () => {
         switchTurns();
     }
@@ -83,9 +91,11 @@ const Game = (() => {
     }
 })();
 
-console.log(Game.getActivePlayer());
-Game.playRound();
-console.log(Game.getActivePlayer());
-Game.playRound();
-console.log(Game.getActivePlayer());
+// console.log(GameController.getActivePlayer());
+// GameController.playRound();
+// console.log(GameController.getActivePlayer());
+// GameController.playRound();
+// console.log(GameController.getActivePlayer());
+// GameController.playRound();
+// console.log(GameController.getActivePlayer());
 
