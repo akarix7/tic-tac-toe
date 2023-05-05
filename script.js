@@ -38,22 +38,23 @@ const Gameboard = (() => {
             gameArr[i] = new Array(3);
             for(let j = 0; j < 3; j++){
                 // console.log(gameDiv.children.item(index).dataset.id);
-                gameDiv.children.item(index++).addEventListener("click", (e) =>{
-                    //gameArr[i][j] = "x";
+                gameDiv.children.item(index++).addEventListener("click", oneClick);
+
+                function oneClick(e) {
                     gameArr[i][j] = GameController.getActivePlayer().getPiece();
-                    //console.log(gameArr[i][j]);
                     e.target.textContent = gameArr[i][j];
                     //let active = gameDiv.closest("div").querySelector(".cell");
                     e.target.classList.add("marked");
-                    e.target.removeEventListener("click", () => {
+                    e.target.removeEventListener("click", oneClick);
 
-                    })
+                    console.log(e);
                     GameController.playRound();
                     console.log(gameArr)
-                })
+                }
                 //gameDiv.children.item(index++).textContent = gameArr[i][j];
             }
         }
+
         //console.log(gameArr);
 
     }
