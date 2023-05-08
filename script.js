@@ -49,14 +49,10 @@ const Gameboard = (() => {
 
                     console.log(e);
                     GameController.playRound();
-                    console.log(gameArr)
                 }
                 //gameDiv.children.item(index++).textContent = gameArr[i][j];
             }
         }
-
-        //console.log(gameArr);
-
     }
     return {
         init,
@@ -71,7 +67,7 @@ const GameController = (() => {
 
     //let activePlayer = playerOne.getTurn() ? playerOne.getName() : playerTwo.getName();
     let activePlayer = playerOne;
-    const switchTurns = () => {
+    const _switchTurns = () => {
         //activePlayer = playerOne.getTurn() ? playerTwo.getName() : playerOne.getName();
         activePlayer = playerOne.getTurn() ? playerTwo : playerOne;
         playerOne.setTurn();
@@ -79,9 +75,36 @@ const GameController = (() => {
     }
     const getActivePlayer = () => activePlayer;
 
+    const _checkWinner = () => {
+        let board = Gameboard.getGameArr();
+        console.log(board[0][0] === board[0][1] === board[0][2]);
+        //rows
+        for(let i = 0; i < 3; i++) {
+            if (board[i][0] !== undefined && board[i][0] === board[i][1] && board[i][1] === board[i][2]) {
+                console.log("row winner!");
+            }
+        }
+        //columns
+        for(let i = 0; i < 3; i++) {
+            if (board[0][i] !== undefined && board[0][i] === board[1][i] && board[1][i] === board[2][0]) {
+                console.log("column winner!!");
+            }
+        }
+        //diagonal
+        if (board[0][0] !== undefined && board[0][0] === board[1][1] && board[1][1] === board[2][2]){
+            console.log("LTR diagonal");
+        }
+        if (board[0][2] !== undefined && board[0][2] === board[1][1] && board[1][1] === board[2][0]){
+            console.log("RTL diagonal");
+        }
+
+        console.log(board);
+    }
+
     //logic to play game
     const playRound = () => {
-        switchTurns();
+        _checkWinner();
+        _switchTurns();
     }
     const setPiece = piece => {
 
@@ -91,12 +114,3 @@ const GameController = (() => {
         playRound
     }
 })();
-
-// console.log(GameController.getActivePlayer());
-// GameController.playRound();
-// console.log(GameController.getActivePlayer());
-// GameController.playRound();
-// console.log(GameController.getActivePlayer());
-// GameController.playRound();
-// console.log(GameController.getActivePlayer());
-
