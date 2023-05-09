@@ -45,3 +45,8 @@ body{
 .marked{
     background-color: var(--ticked);
 }
+
+#title{
+    font-size: 3rem;
+    margin-bottom: 15px;
+}

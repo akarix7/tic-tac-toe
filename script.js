@@ -14,6 +14,7 @@ const Gameboard = (() => {
     //let gameArr = [["", "", ""], ["", "", ""], ["","",""]];
     let gameArr = new Array(3);
     let gameDiv = document.querySelector(".game");
+    let containerDiv = document.querySelector(".container");
 
     const init = () => {
         _createBoard();
@@ -49,10 +50,18 @@ const Gameboard = (() => {
 
                     console.log(e);
                     GameController.playRound();
+
+                    if(GameController.getWinner() !== null){
+                        displayWinner(GameController.getWinner());
+                    }
                 }
                 //gameDiv.children.item(index++).textContent = gameArr[i][j];
             }
         }
+    }
+    const displayWinner = (winner) => {
+        let divTitle = document.getElementById("title");
+        divTitle.textContent = winner.getName() + " wins!";
     }
     return {
         init,
@@ -67,6 +76,7 @@ const GameController = (() => {
 
     //let activePlayer = playerOne.getTurn() ? playerOne.getName() : playerTwo.getName();
     let activePlayer = playerOne;
+    let isWinner = null;
     const _switchTurns = () => {
         //activePlayer = playerOne.getTurn() ? playerTwo.getName() : playerOne.getName();
         activePlayer = playerOne.getTurn() ? playerTwo : playerOne;
@@ -77,40 +87,48 @@ const GameController = (() => {
 
     const _checkWinner = () => {
         let board = Gameboard.getGameArr();
-        console.log(board[0][0] === board[0][1] === board[0][2]);
         //rows
         for(let i = 0; i < 3; i++) {
             if (board[i][0] !== undefined && board[i][0] === board[i][1] && board[i][1] === board[i][2]) {
+                setWinner(getActivePlayer());
                 console.log("row winner!");
             }
         }
         //columns
         for(let i = 0; i < 3; i++) {
-            if (board[0][i] !== undefined && board[0][i] === board[1][i] && board[1][i] === board[2][0]) {
+            if (board[0][i] !== undefined && board[0][i] === board[1][i] && board[1][i] === board[2][i]) {
+                setWinner(getActivePlayer());
                 console.log("column winner!!");
             }
         }
         //diagonal
         if (board[0][0] !== undefined && board[0][0] === board[1][1] && board[1][1] === board[2][2]){
+            setWinner(getActivePlayer());
             console.log("LTR diagonal");
         }
         if (board[0][2] !== undefined && board[0][2] === board[1][1] && board[1][1] === board[2][0]){
+            setWinner(getActivePlayer());
             console.log("RTL diagonal");
         }
 
         console.log(board);
     }
 
+    const setWinner = (player) => {
+        isWinner = player;
+    }
+
+    const getWinner = () => isWinner;
+
     //logic to play game
     const playRound = () => {
         _checkWinner();
         _switchTurns();
     }
-    const setPiece = piece => {
 
-    }
     return {
         getActivePlayer,
-        playRound
+        playRound,
+        getWinner
     }
 })();
