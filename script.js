@@ -11,7 +11,6 @@ const Player = (name, piece, turn) => {
 
 const Gameboard = (() => {
     //let gameArr = [["x", "o", "x"], ["o", "x", "o"], ["x", "o", "x"]];
-    //let gameArr = [["", "", ""], ["", "", ""], ["","",""]];
     let gameArr = new Array(3);
     let gameDiv = document.querySelector(".game");
     let containerDiv = document.querySelector(".container");
@@ -48,11 +47,18 @@ const Gameboard = (() => {
                     e.target.classList.add("marked");
                     e.target.removeEventListener("click", oneClick);
 
-                    console.log(e);
+                    //console.log(e.target);
                     GameController.playRound();
 
-                    if(GameController.getWinner() !== null){
+                    if(GameController.isGameOver()){
                         displayWinner(GameController.getWinner());
+
+                        // console.log(e.target.parentNode);
+                        // for(let k = 0; k < 9; k++){
+                        //     //gameDiv.children.item(k).removeEventListener("click", oneClick);
+                        //     //e.target.parentNode.children.item(k).removeEventListener("click", oneClick)
+                        //     console.log(e.target.parentNode.children.item(k));
+                        // }
                     }
                 }
                 //gameDiv.children.item(index++).textContent = gameArr[i][j];
@@ -110,8 +116,6 @@ const GameController = (() => {
             setWinner(getActivePlayer());
             console.log("RTL diagonal");
         }
-
-        console.log(board);
     }
 
     const setWinner = (player) => {
@@ -119,6 +123,10 @@ const GameController = (() => {
     }
 
     const getWinner = () => isWinner;
+
+    const isGameOver = () => {
+        return getWinner() !== null;
+    }
 
     //logic to play game
     const playRound = () => {
@@ -129,6 +137,7 @@ const GameController = (() => {
     return {
         getActivePlayer,
         playRound,
-        getWinner
+        getWinner,
+        isGameOver
     }
 })();
