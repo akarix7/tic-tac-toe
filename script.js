@@ -38,14 +38,31 @@ const Gameboard = (() => {
             gameArr[i] = new Array(3);
             for(let j = 0; j < 3; j++){
                 // console.log(gameDiv.children.item(index).dataset.id);
-                gameDiv.children.item(index++).addEventListener("click", oneClick);
+                gameDiv.children.item(index++).addEventListener("click", oneClick, {once: true});
+                // gameDiv.children.item(index++).addEventListener("click", (e) => {
+                //     gameArr[i][j] = GameController.getActivePlayer().getPiece();
+                //     e.target.textContent = gameArr[i][j];
+                //     e.target.classList.add("marked");
+                //
+                //     GameController.playRound();
+                //     if(GameController.isGameOver()){
+                //         displayWinner(GameController.getWinner());
+                //         const cells = document.querySelectorAll(".cell");
+                //
+                //         cells.forEach(cell => {
+                //             cell.removeEventListener("click", )
+                //             //console.log(cell);
+                //         })
+                //     }
+                //
+                // }, {once: true})
 
                 function oneClick(e) {
                     gameArr[i][j] = GameController.getActivePlayer().getPiece();
                     e.target.textContent = gameArr[i][j];
                     //let active = gameDiv.closest("div").querySelector(".cell");
                     e.target.classList.add("marked");
-                    e.target.removeEventListener("click", oneClick);
+                    //e.target.removeEventListener("click", oneClick);
 
                     //console.log(e.target);
                     GameController.playRound();
@@ -53,14 +70,16 @@ const Gameboard = (() => {
                     if(GameController.isGameOver()){
                         displayWinner(GameController.getWinner());
 
-                        // console.log(e.target.parentNode);
+                        //console.log(e.target.parentNode);
                         // for(let k = 0; k < 9; k++){
-                        //     //gameDiv.children.item(k).removeEventListener("click", oneClick);
+                        //     gameDiv.children.item(k).removeEventListener("click", oneClick);
+                        //
                         //     //e.target.parentNode.children.item(k).removeEventListener("click", oneClick)
                         //     console.log(e.target.parentNode.children.item(k));
                         // }
                     }
                 }
+
                 //gameDiv.children.item(index++).textContent = gameArr[i][j];
             }
         }
