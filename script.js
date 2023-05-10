@@ -21,10 +21,10 @@ const Gameboard = (() => {
     }
 
     const getGameArr = () => gameArr;
-
+//change from div to button? then use inactive option to make all cells/buttons inactive
     const _createBoard = () => {
         for(let i = 0; i < 9; i++){
-            let cell = document.createElement("div");
+            let cell = document.createElement("button");
             cell.className = "cell";
             cell.dataset.id = (i).toString();
             gameDiv.appendChild(cell);
@@ -39,23 +39,6 @@ const Gameboard = (() => {
             for(let j = 0; j < 3; j++){
                 // console.log(gameDiv.children.item(index).dataset.id);
                 gameDiv.children.item(index++).addEventListener("click", oneClick, {once: true});
-                // gameDiv.children.item(index++).addEventListener("click", (e) => {
-                //     gameArr[i][j] = GameController.getActivePlayer().getPiece();
-                //     e.target.textContent = gameArr[i][j];
-                //     e.target.classList.add("marked");
-                //
-                //     GameController.playRound();
-                //     if(GameController.isGameOver()){
-                //         displayWinner(GameController.getWinner());
-                //         const cells = document.querySelectorAll(".cell");
-                //
-                //         cells.forEach(cell => {
-                //             cell.removeEventListener("click", )
-                //             //console.log(cell);
-                //         })
-                //     }
-                //
-                // }, {once: true})
 
                 function oneClick(e) {
                     gameArr[i][j] = GameController.getActivePlayer().getPiece();
@@ -68,25 +51,32 @@ const Gameboard = (() => {
                     GameController.playRound();
 
                     if(GameController.isGameOver()){
-                        displayWinner(GameController.getWinner());
+                        if(GameController.getTurnsLeft() !== 0) {
+                            _displayWinner(GameController.getWinner());
+                        }else{
+                            _displayTie();
+                        }
 
-                        //console.log(e.target.parentNode);
-                        // for(let k = 0; k < 9; k++){
-                        //     gameDiv.children.item(k).removeEventListener("click", oneClick);
-                        //
-                        //     //e.target.parentNode.children.item(k).removeEventListener("click", oneClick)
-                        //     console.log(e.target.parentNode.children.item(k));
-                        // }
+                        const cells = document.querySelectorAll(".cell");
+
+                        cells.forEach(cell => {
+                            cell.disabled = true;
+                        })
+
                     }
                 }
-
                 //gameDiv.children.item(index++).textContent = gameArr[i][j];
             }
         }
     }
-    const displayWinner = (winner) => {
+    const _displayWinner = (winner) => {
         let divTitle = document.getElementById("title");
         divTitle.textContent = winner.getName() + " wins!";
+    }
+
+    const _displayTie = () => {
+        let divTitle = document.getElementById("title");
+        divTitle.textContent = "It's a tie!";
     }
     return {
         init,
@@ -96,14 +86,15 @@ const Gameboard = (() => {
 
 const GameController = (() => {
     Gameboard.init();
+    let board = Gameboard.getGameArr();
+    let turnsLeft = 9;
+
     const playerOne = Player("Player One", "x", true);
     const playerTwo = Player("Player Two", "o", false);
 
-    //let activePlayer = playerOne.getTurn() ? playerOne.getName() : playerTwo.getName();
     let activePlayer = playerOne;
     let isWinner = null;
     const _switchTurns = () => {
-        //activePlayer = playerOne.getTurn() ? playerTwo.getName() : playerOne.getName();
         activePlayer = playerOne.getTurn() ? playerTwo : playerOne;
         playerOne.setTurn();
         playerTwo.setTurn();
@@ -111,7 +102,7 @@ const GameController = (() => {
     const getActivePlayer = () => activePlayer;
 
     const _checkWinner = () => {
-        let board = Gameboard.getGameArr();
+
         //rows
         for(let i = 0; i < 3; i++) {
             if (board[i][0] !== undefined && board[i][0] === board[i][1] && board[i][1] === board[i][2]) {
@@ -144,11 +135,16 @@ const GameController = (() => {
     const getWinner = () => isWinner;
 
     const isGameOver = () => {
-        return getWinner() !== null;
+        return getWinner() !== null || getTurnsLeft() === 0;
     }
+
+    const _counter = () => --turnsLeft;
+
+    const getTurnsLeft = () => turnsLeft;
 
     //logic to play game
     const playRound = () => {
+        _counter();
         _checkWinner();
         _switchTurns();
     }
@@ -157,6 +153,7 @@ const GameController = (() => {
         getActivePlayer,
         playRound,
         getWinner,
+        getTurnsLeft,
         isGameOver
     }
 })();

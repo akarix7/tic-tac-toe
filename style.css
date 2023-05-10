@@ -42,6 +42,11 @@ body{
     align-items: center;
 }
 
+button.cell{
+    font-size: inherit;
+    font-family: inherit;
+}
+
 .marked{
     background-color: var(--ticked);
 }
