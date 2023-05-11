@@ -8,6 +8,7 @@
     --container: #F8F8F0;
     --white: #FFFFFF;
     --ticked: #E1E1E1;
+    --button: #A09CC8;
 }
 
 body{
@@ -54,4 +55,13 @@ button.cell{
 #title{
     font-size: 3rem;
     margin-bottom: 15px;
+}
+
+button.resetGame{
+    margin-top: 15px;
+    background-color: var(--button);
+    border: 1px solid transparent;
+    border-radius: 20px;
+    box-shadow: 0 8px 0 0 #837FAC;
+    padding: 7px;
 }
