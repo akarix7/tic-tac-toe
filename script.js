@@ -1,5 +1,8 @@
 const Player = (name, piece, turn) => {
     const getName = () => name;
+    const setName = (name) => {
+        this.name = name;
+    }
     const getPiece = () => piece;
     const getTurn = () => turn;
     const setTurn = () => {
@@ -20,6 +23,30 @@ const Gameboard = (() => {
         _render();
     }
 
+    const displayForm = () => {
+        // gameDiv.style.transform = "scale(0)";
+        gameDiv.style.visibility = "hidden";
+        //gameDiv.style.display = "none";
+    }
+
+    //handle data:
+    //1. if submit and empty just default player one, player two
+    //2. if with data then make new player but must be sent to Game Controller and set there.
+    //Question is how to send data? array? does return work?
+    const handleForm = () => {
+        const form = document.getElementById("names");
+
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const player1 = form.elements["one"].value;
+            const player2 = form.elements["two"].value;
+            // console.log(form.elements["one"].value);
+            // console.log(form.elements["two"].value);
+            return {player1, player2}
+        })
+        console.log("hello");
+    }
+
     const getGameArr = () => gameArr;
 //change from div to button? then use inactive option to make all cells/buttons inactive
     const _createBoard = () => {
@@ -31,7 +58,6 @@ const Gameboard = (() => {
         }
     }
 
-    //last active cell that set off an event should change turns
     const _render = () => {
         let index = 0;
         for(let i = 0; i < 3; i++){
@@ -54,7 +80,6 @@ const Gameboard = (() => {
                         }else{
                             _displayTie();
                         }
-
                         const cells = document.querySelectorAll(".cell");
 
                         cells.forEach(cell => {
@@ -115,11 +140,14 @@ const Gameboard = (() => {
     return {
         init,
         getGameArr,
+        displayForm,
+        handleForm
     }
 })();
 
 const GameController = (() => {
     Gameboard.init();
+    //console.log(Gameboard.handleForm.player1);
     let board = Gameboard.getGameArr();
     let turnsLeft = 9;
 
@@ -179,8 +207,6 @@ const GameController = (() => {
         setWinner(null);
         turnsLeft = 9;
         activePlayer = playerOne;
-        console.log("playerone: " + playerOne.getTurn());
-        console.log("playertwo: " + playerTwo.getTurn());
 
         !playerOne.getTurn() ? playerOne.setTurn() : playerTwo.setTurn();
     }

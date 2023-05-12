@@ -65,3 +65,13 @@ button.resetGame{
     box-shadow: 0 8px 0 0 #837FAC;
     padding: 7px;
 }
+
+#names{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+}
