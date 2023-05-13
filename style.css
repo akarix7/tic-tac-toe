@@ -8,7 +8,7 @@
     --container: #F8F8F0;
     --white: #FFFFFF;
     --ticked: #E1E1E1;
-    --button: #A09CC8;
+    --button: #82d3c3;
 }
 
 body{
@@ -21,11 +21,16 @@ body{
     align-items: center;
 }
 
+.UI{
+    display: grid;
+}
+
 .container{
     background-color: var(--container);
     padding: 10px;
     border-radius: 15px;
     box-shadow: 0 0 0 10px rgba(255,255,255,0.3);
+    grid-column: 2;
 }
 
 .game{
@@ -55,15 +60,17 @@ button.cell{
 #title{
     font-size: 3rem;
     margin-bottom: 15px;
+    grid-column: 2;
+    justify-self: center;
 }
 
-button.resetGame{
+button.resetGame, input[type=submit]{
     margin-top: 15px;
     background-color: var(--button);
     border: 1px solid transparent;
     border-radius: 20px;
-    box-shadow: 0 8px 0 0 #837FAC;
-    padding: 7px;
+    box-shadow: 0 5px 0 0 #2B554D;
+    padding: 7px 13px;
 }
 
 #names{
@@ -72,6 +79,24 @@ button.resetGame{
     justify-content: center;
     align-items: center;
     position: absolute;
-    top: 0;
+    top: 10%;
     bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.left{
+    grid-column: 1;
+    position: absolute;
+    left: 10%;
+    top: 30%;
+    font-size: 1.7rem;
+}
+
+.right{
+    grid-column: 3;
+    position: absolute;
+    right: 10%;
+    top: 30%;
+    font-size: 1.7rem;
 }

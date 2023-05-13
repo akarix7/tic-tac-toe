@@ -12,12 +12,13 @@ const Player = (name, piece, turn) => {
     return {getName, setName, getPiece, getTurn, setTurn};
 }
 
-const Gameboard = (() => {
+const GameBoard = (() => {
     let gameArr = new Array(3);
     let playersArr = [];
     const form = document.getElementById("names");
-    let gameDiv = document.querySelector(".game");
-    let containerDiv = document.querySelector(".container");
+    const gameDiv = document.querySelector(".game");
+    const left = document.querySelector(".left");
+    const right = document.querySelector(".right");
 
     const init = () => {
         _displayForm();
@@ -29,7 +30,7 @@ const Gameboard = (() => {
     const _displayForm = () => {
         // gameDiv.style.transform = "scale(0)";
         gameDiv.style.visibility = "hidden";
-        //gameDiv.style.display = "none";
+        // gameDiv.style.display = "none";
     }
 
     const _displayGame = () =>{
@@ -46,11 +47,12 @@ const Gameboard = (() => {
             playersArr.push(form.elements["two"].value);
             GameController.createPlayer();
             _displayGame();
+            _displayTurns(GameController.getActivePlayer());
         })
     }
 
     const getGameArr = () => gameArr;
-//change from div to button? then use inactive option to make all cells/buttons inactive
+
     const _createBoard = () => {
         for(let i = 0; i < 9; i++){
             let cell = document.createElement("button");
@@ -75,6 +77,7 @@ const Gameboard = (() => {
                     e.target.classList.add("marked");
                     //e.target.removeEventListener("click", oneClick);
                     GameController.playRound();
+                    _displayTurns(GameController.getActivePlayer());
 
                     if(GameController.isGameOver()){
                         if(GameController.getTurnsLeft() !== 0) {
@@ -88,6 +91,7 @@ const Gameboard = (() => {
                             cell.disabled = true;
                         })
                         _displayResetButton();
+                        _hideTurns();
 
                     }
                 }
@@ -137,34 +141,49 @@ const Gameboard = (() => {
         GameController.resetGame();
         _render();
         document.querySelector(".resetGame").style.display = "none";
+        _displayTurns(GameController.getActivePlayer());
+
+    }
+
+    const _displayTurns = (player) => {
+        if(player.getPiece() === "x"){
+            left.textContent = `${player.getName()}` + "'s turn ";
+            right.textContent = "";
+        }else{
+            right.textContent = `${player.getName()}` + "'s turn ";
+            left.textContent = "";
+        }
+    }
+
+    const _hideTurns = () => {
+        left.textContent = "";
+        right.textContent = "";
     }
 
     return {
         init,
         getGameArr,
-        getPlayersArr
+        getPlayersArr,
     }
 })();
 
 const GameController = (() => {
-    Gameboard.init();
-    let board = Gameboard.getGameArr();
-    let players = Gameboard.getPlayersArr();
+    GameBoard.init();
+    let board = GameBoard.getGameArr();
+    let players = GameBoard.getPlayersArr();
     let turnsLeft = 9;
 
     const playerOne = Player("Player One", "x", true);
     const playerTwo = Player("Player Two", "o", false);
+    let activePlayer = playerOne;
 
     const createPlayer = () => {
         if(players[0] !== undefined && players[1] !== undefined){
             playerOne.setName(players[0]);
             playerTwo.setName(players[1]);
-            console.log("Player1:" + playerOne.getName());
-            console.log("Player2:" + playerTwo.getName());
         }
     }
 
-    let activePlayer = playerOne;
     let isWinner = null;
     const _switchTurns = () => {
         activePlayer = playerOne.getTurn() ? playerTwo : playerOne;
@@ -221,7 +240,6 @@ const GameController = (() => {
         !playerOne.getTurn() ? playerOne.setTurn() : playerTwo.setTurn();
     }
 
-    //logic to play game
     const playRound = () => {
         _counter();
         _checkWinner();
