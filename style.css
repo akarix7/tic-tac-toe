@@ -58,10 +58,13 @@ button.cell{
 }
 
 #title{
-    font-size: 3rem;
+    font-size: 4vmax;
     margin-bottom: 15px;
     grid-column: 2;
     justify-self: center;
+    max-width: 290px;
+    text-align: center;
+    /*font-size: max(4vmax, 3rem);*/
 }
 
 button.resetGame, input[type=submit]{

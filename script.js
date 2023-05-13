@@ -178,7 +178,7 @@ const GameController = (() => {
     let activePlayer = playerOne;
 
     const createPlayer = () => {
-        if(players[0] !== undefined && players[1] !== undefined){
+        if(players[0] !== "" && players[1] !== ""){
             playerOne.setName(players[0]);
             playerTwo.setName(players[1]);
         }
