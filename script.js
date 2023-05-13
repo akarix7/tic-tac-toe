@@ -1,7 +1,7 @@
 const Player = (name, piece, turn) => {
     const getName = () => name;
-    const setName = (name) => {
-        this.name = name;
+    const setName = (n) => {
+        name = n;
     }
     const getPiece = () => piece;
     const getTurn = () => turn;
@@ -9,42 +9,44 @@ const Player = (name, piece, turn) => {
         turn = !turn;
     }
 
-    return {getName, getPiece, getTurn, setTurn};
+    return {getName, setName, getPiece, getTurn, setTurn};
 }
 
 const Gameboard = (() => {
-    //let gameArr = [["x", "o", "x"], ["o", "x", "o"], ["x", "o", "x"]];
     let gameArr = new Array(3);
+    let playersArr = [];
+    const form = document.getElementById("names");
     let gameDiv = document.querySelector(".game");
     let containerDiv = document.querySelector(".container");
 
     const init = () => {
+        _displayForm();
+        _handleForm();
         _createBoard();
         _render();
     }
 
-    const displayForm = () => {
+    const _displayForm = () => {
         // gameDiv.style.transform = "scale(0)";
         gameDiv.style.visibility = "hidden";
         //gameDiv.style.display = "none";
     }
 
-    //handle data:
-    //1. if submit and empty just default player one, player two
-    //2. if with data then make new player but must be sent to Game Controller and set there.
-    //Question is how to send data? array? does return work?
-    const handleForm = () => {
-        const form = document.getElementById("names");
+    const _displayGame = () =>{
+        form.style.visibility = "hidden";
+        gameDiv.style.visibility = "visible";
+    }
 
+    const getPlayersArr = () => playersArr;
+
+    function _handleForm(){
         form.addEventListener("submit", (e) => {
             e.preventDefault();
-            const player1 = form.elements["one"].value;
-            const player2 = form.elements["two"].value;
-            // console.log(form.elements["one"].value);
-            // console.log(form.elements["two"].value);
-            return {player1, player2}
+            playersArr.push(form.elements["one"].value);
+            playersArr.push(form.elements["two"].value);
+            GameController.createPlayer();
+            _displayGame();
         })
-        console.log("hello");
     }
 
     const getGameArr = () => gameArr;
@@ -140,19 +142,27 @@ const Gameboard = (() => {
     return {
         init,
         getGameArr,
-        displayForm,
-        handleForm
+        getPlayersArr
     }
 })();
 
 const GameController = (() => {
     Gameboard.init();
-    //console.log(Gameboard.handleForm.player1);
     let board = Gameboard.getGameArr();
+    let players = Gameboard.getPlayersArr();
     let turnsLeft = 9;
 
     const playerOne = Player("Player One", "x", true);
     const playerTwo = Player("Player Two", "o", false);
+
+    const createPlayer = () => {
+        if(players[0] !== undefined && players[1] !== undefined){
+            playerOne.setName(players[0]);
+            playerTwo.setName(players[1]);
+            console.log("Player1:" + playerOne.getName());
+            console.log("Player2:" + playerTwo.getName());
+        }
+    }
 
     let activePlayer = playerOne;
     let isWinner = null;
@@ -219,6 +229,7 @@ const GameController = (() => {
     }
 
     return {
+        createPlayer,
         getActivePlayer,
         playRound,
         getWinner,
