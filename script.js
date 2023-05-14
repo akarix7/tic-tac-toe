@@ -15,6 +15,8 @@ const Player = (name, piece, turn) => {
 const GameBoard = (() => {
     let gameArr = new Array(3);
     let playersArr = [];
+    let playedOnce = false;
+    const title = document.getElementById("title");
     const form = document.getElementById("names");
     const gameDiv = document.querySelector(".game");
     const left = document.querySelector(".left");
@@ -62,50 +64,57 @@ const GameBoard = (() => {
         }
     }
 
+    const click = (e, row, col) => {
+        gameArr[row][col] = GameController.getActivePlayer().getPiece();
+        e.target.textContent = gameArr[row][col];
+        //let active = gameDiv.closest("div").querySelector(".cell");
+        e.target.classList.add("marked");
+        //e.target.removeEventListener("click", oneClick);
+
+        GameController.playRound();
+        _displayTurns(GameController.getActivePlayer());
+        _isGameOver();
+    }
+
     const _render = () => {
-        let index = 0;
-        for(let i = 0; i < 3; i++){
+        let item = 0;
+
+        for(let i = 0; i < 3; i++) {
             gameArr[i] = new Array(3);
-            for(let j = 0; j < 3; j++){
-                // console.log(gameDiv.children.item(index).dataset.id);
-                gameDiv.children.item(index++).addEventListener("click", oneClick, {once: true});
-
-                function oneClick(e) {
-                    gameArr[i][j] = GameController.getActivePlayer().getPiece();
-                    e.target.textContent = gameArr[i][j];
-                    //let active = gameDiv.closest("div").querySelector(".cell");
-                    e.target.classList.add("marked");
-                    //e.target.removeEventListener("click", oneClick);
-                    GameController.playRound();
-                    _displayTurns(GameController.getActivePlayer());
-
-                    if(GameController.isGameOver()){
-                        if(GameController.getTurnsLeft() !== 0) {
-                            _displayWinner(GameController.getWinner());
-                        }else{
-                            _displayTie();
-                        }
-                        const cells = document.querySelectorAll(".cell");
-
-                        cells.forEach(cell => {
-                            cell.disabled = true;
-                        })
-                        _displayResetButton();
-                        _hideTurns();
-
-                    }
+            for (let j = 0; j < 3; j++) {
+                //console.log(gameDiv.children.item(index).dataset.id);
+                let element = gameDiv.children.item(item++);
+                if(element.classList.contains("marked") || !playedOnce){
+                    element.addEventListener("click", function(e){click(e,i,j)}, {once:true});
                 }
             }
         }
     }
+
+    const _isGameOver = () => {
+        if(GameController.isGameOver()){
+            if(GameController.getTurnsLeft() !== 0) {
+                _displayWinner(GameController.getWinner());
+            }else{
+                _displayTie();
+            }
+            const cells = document.querySelectorAll(".cell");
+
+            cells.forEach(cell => {
+                cell.disabled = true;
+            })
+
+            _displayResetButton();
+            _hideTurns();
+
+        }
+    }
     const _displayWinner = (winner) => {
-        let divTitle = document.getElementById("title");
-        divTitle.textContent = winner.getName() + " wins!";
+        title.textContent = winner.getName() + " wins!";
     }
 
     const _displayTie = () => {
-        let divTitle = document.getElementById("title");
-        divTitle.textContent = "It's a tie!";
+        title.textContent = "It's a tie!";
     }
 
     const _displayResetButton = () => {
@@ -123,14 +132,13 @@ const GameBoard = (() => {
     }
 
     const resetGame = () => {
+        playedOnce = true;
         for(let i = 0; i < 3; i++){
-            for(let j = 0; j < 3; j++){
-                gameArr[i].pop();
-            }
+            gameArr[i].pop();
         }
-        let divTitle = document.getElementById("title");
-        divTitle.textContent = "Tic-Tac-Toe";
+        title.textContent = "Tic-Tac-Toe";
 
+        _render();
         const cells = document.querySelectorAll(".cell");
 
         cells.forEach(cell => {
@@ -139,7 +147,7 @@ const GameBoard = (() => {
             cell.classList.remove("marked");
         })
         GameController.resetGame();
-        _render();
+
         document.querySelector(".resetGame").style.display = "none";
         _displayTurns(GameController.getActivePlayer());
 
